@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Banco XYZ API
-  description: API para gestionar usuarios y cuentas de banco XYZ.
+  description: API para gestionar usuarios, cuentas y transacciones bancarias en el banco XYZ.
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api
@@ -39,7 +39,6 @@ paths:
           description: Cliente creado
         'default':
           description: Error en la creación del cliente
-
   /clientes/{id}:
     get:
       tags:
@@ -99,7 +98,6 @@ paths:
           description: Cliente eliminado
         'default':
           description: Error al eliminar el cliente
-
   /cuentas:
     get:
       tags:
@@ -133,7 +131,6 @@ paths:
           description: Cuenta creada
         'default':
           description: Error en la creación de la cuenta
-
   /cuentas/{id}:
     get:
       tags:
@@ -171,7 +168,6 @@ paths:
           description: Cuenta eliminada
         'default':
           description: Error al eliminar la cuenta
-
   /cuentas/{id}/depositar:
     put:
       tags:
@@ -199,7 +195,6 @@ paths:
           description: Depósito exitoso
         'default':
           description: Error en el depósito
-
   /cuentas/{id}/retirar:
     put:
       tags:
@@ -227,7 +222,77 @@ paths:
           description: Retiro exitoso
         'default':
           description: Error en el retiro
+  /transacciones/deposito:
+    post:
+      tags:
+        - transaccion
+      summary: Registrar un depósito
+      operationId: createDepositTransaction
+      requestBody:
+        description: Datos para registrar un depósito
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Depósito registrado
+        'default':
+          description: Error en el registro del depósito
 
+  /transacciones/retiro:
+    post:
+      tags:
+        - transaccion
+      summary: Registrar un retiro
+      operationId: createWithdrawalTransaction
+      requestBody:
+        description: Datos para registrar un retiro
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Retiro registrado
+        'default':
+          description: Error en el registro del retiro
+
+  /transacciones/transferencia:
+    post:
+      tags:
+        - transaccion
+      summary: Registrar una transferencia
+      operationId: createTransferTransaction
+      requestBody:
+        description: Datos para registrar una transferencia
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transferencia registrada
+        'default':
+          description: Error en el registro de la transferencia
+
+  /transacciones/historial:
+    get:
+      tags:
+        - transaccion
+      summary: Consultar historial de transacciones
+      operationId: getTransactionHistory
+      responses:
+        '200':
+          description: Historial de transacciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        'default':
+          description: Error en la consulta del historial de transacciones
 components:
   schemas:
     Customer:
@@ -248,7 +313,6 @@ components:
         - apellido
         - dni
         - email
-
     Account:
       type: object
       properties:
@@ -271,3 +335,29 @@ components:
         - saldo
         - tipoCuenta
         - clienteId
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        tipo:
+          type: string
+          enum:
+            - DEPOSITO
+            - RETIRO
+            - TRANSFERENCIA
+        monto:
+          type: number
+          format: double
+        fecha:
+          type: string
+          format: date-time
+        cuentas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+      required:
+        - tipo
+        - monto
+        - fecha
+        - cuentas
