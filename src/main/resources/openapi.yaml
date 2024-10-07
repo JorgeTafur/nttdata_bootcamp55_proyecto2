@@ -352,12 +352,11 @@ components:
         fecha:
           type: string
           format: date-time
-        cuentas:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
+        cuentaOrigenId:
+          type: integer
+        cuentaDestinoId:
+          type: integer
       required:
         - tipo
         - monto
         - fecha
-        - cuentas
