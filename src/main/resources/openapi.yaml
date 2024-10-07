@@ -1,0 +1,273 @@
+openapi: 3.0.1
+info:
+  title: Banco XYZ API
+  description: API para gestionar usuarios y cuentas de banco XYZ.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /clientes:
+    get:
+      tags:
+        - cliente
+      summary: Listar todos los clientes
+      operationId: listCustomers
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        'default':
+          description: Error en la obtención de clientes
+    post:
+      tags:
+        - cliente
+      summary: Crear nuevo cliente
+      operationId: createCustomer
+      requestBody:
+        description: Objeto cliente que necesita ser creado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          description: Cliente creado
+        'default':
+          description: Error en la creación del cliente
+
+  /clientes/{id}:
+    get:
+      tags:
+        - cliente
+      summary: Obtener cliente por su ID
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles de cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        'default':
+          description: Error en la obtención del cliente
+    put:
+      tags:
+        - cliente
+      summary: Actualizar cliente por su ID
+      operationId: updateCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Objeto cliente actualizado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Cliente actualizado
+        'default':
+          description: Error en la actualización del cliente
+    delete:
+      tags:
+        - cliente
+      summary: Eliminar cliente por su ID
+      operationId: deleteCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Cliente eliminado
+        'default':
+          description: Error al eliminar el cliente
+
+  /cuentas:
+    get:
+      tags:
+        - cuenta
+      summary: Listar todas las cuentas
+      operationId: listAccounts
+      responses:
+        '200':
+          description: Lista de cuentas bancarias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        'default':
+          description: Error en la obtención de cuentas
+    post:
+      tags:
+        - cuenta
+      summary: Crear una nueva cuenta
+      operationId: createAccount
+      requestBody:
+        description: Objeto cuenta que necesita ser creado
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        '201':
+          description: Cuenta creada
+        'default':
+          description: Error en la creación de la cuenta
+
+  /cuentas/{id}:
+    get:
+      tags:
+        - cuenta
+      summary: Obtener cuenta por su ID
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles de cuenta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        'default':
+          description: Error en la obtención de la cuenta
+    delete:
+      tags:
+        - cuenta
+      summary: Eliminar cuenta por su ID
+      operationId: deleteAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Cuenta eliminada
+        'default':
+          description: Error al eliminar la cuenta
+
+  /cuentas/{id}/depositar:
+    put:
+      tags:
+        - cuenta
+      summary: Depositar dinero en una cuenta
+      operationId: depositIntoAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Monto a depositar
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  format: double
+      responses:
+        '200':
+          description: Depósito exitoso
+        'default':
+          description: Error en el depósito
+
+  /cuentas/{id}/retirar:
+    put:
+      tags:
+        - cuenta
+      summary: Retirar dinero de una cuenta
+      operationId: withdrawFromAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Monto a retirar
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  format: double
+      responses:
+        '200':
+          description: Retiro exitoso
+        'default':
+          description: Error en el retiro
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+      required:
+        - nombre
+        - apellido
+        - dni
+        - email
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        numeroCuenta:
+          type: string
+        saldo:
+          type: number
+          format: double
+        tipoCuenta:
+          type: string
+          enum:
+            - AHORROS
+            - CORRIENTE
+        clienteId:
+          type: integer
+      required:
+        - numeroCuenta
+        - saldo
+        - tipoCuenta
+        - clienteId
