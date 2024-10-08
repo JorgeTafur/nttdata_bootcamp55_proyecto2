@@ -23,7 +23,7 @@ public class TransactionApiController {
     public ResponseEntity<Transaction> createDeposit(@RequestBody Transaction transaction) {
         transaction.setTipo("DEPOSITO");
         transaction.setFecha(LocalDateTime.now());
-        return ResponseEntity.status(201).body(transactionService.createTransaction(transaction));
+        return ResponseEntity.status(201).body(transactionService.realizarDeposito(transaction));
     }
 
     @PostMapping("/retiro")
@@ -31,7 +31,7 @@ public class TransactionApiController {
     public ResponseEntity<Transaction> createWithdrawal(@RequestBody Transaction transaction) {
         transaction.setTipo("RETIRO");
         transaction.setFecha(LocalDateTime.now());
-        return ResponseEntity.status(201).body(transactionService.createTransaction(transaction));
+        return ResponseEntity.status(201).body(transactionService.realizarRetiro(transaction));
     }
 
     @PostMapping("/transferencia")
@@ -39,12 +39,12 @@ public class TransactionApiController {
     public ResponseEntity<Transaction> createTransfer(@RequestBody Transaction transaction) {
         transaction.setTipo("TRANSFERENCIA");
         transaction.setFecha(LocalDateTime.now());
-        return ResponseEntity.status(201).body(transactionService.createTransaction(transaction));
+        return ResponseEntity.status(201).body(transactionService.realizarTransferencia(transaction));
     }
 
     @GetMapping("/historial")
     @Operation(summary = "Consultar historial de transacciones")
     public ResponseEntity<List<Transaction>> getTransactionHistory() {
-        return ResponseEntity.ok(transactionService.getAllTransactions());
+        return ResponseEntity.ok(transactionService.obtenerTransacciones());
     }
 }

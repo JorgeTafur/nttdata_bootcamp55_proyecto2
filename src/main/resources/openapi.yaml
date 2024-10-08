@@ -168,6 +168,27 @@ paths:
           description: Cuenta eliminada
         'default':
           description: Error al eliminar la cuenta
+  /cuentas/numeroCuenta/{numeroCuenta}:
+    get:
+      tags:
+        - cuenta
+      summary: Obtener cuenta por su numero de cuenta
+      operationId: getAccountByAccountNumber
+      parameters:
+        - name: numeroCuenta
+          in: path
+          required: true
+          schema:
+            type: String
+      responses:
+        '200':
+          description: Detalles de cuenta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        'default':
+          description: Error en la obtención de la cuenta
   /cuentas/{id}/depositar:
     put:
       tags:

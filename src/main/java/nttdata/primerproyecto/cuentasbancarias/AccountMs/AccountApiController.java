@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cuentas")
@@ -42,6 +43,14 @@ public class AccountApiController {
             return new ResponseEntity<>(account, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Obtener una cuenta por numero de cuenta
+    @GetMapping("/numeroCuenta/{numeroCuenta}")
+    public ResponseEntity<Account> getAccountByAccountNumber(@PathVariable String numeroCuenta) {
+        Optional<Account> account = accountService.getAccountByAccountNumber(numeroCuenta);
+        return account.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     // Eliminar una cuenta
