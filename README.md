@@ -34,7 +34,6 @@ http://localhost:8080/cuentas
 
 Body (POST):
 {
-"numeroCuenta": "0123456789",
 "saldo": 100.00,
 "tipoCuenta": "AHORROS",
 "clienteId": 1

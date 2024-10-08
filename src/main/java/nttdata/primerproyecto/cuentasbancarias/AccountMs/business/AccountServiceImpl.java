@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -25,6 +28,14 @@ public class AccountServiceImpl implements AccountService {
         if (account.getSaldo() <= 0) {
             throw new IllegalArgumentException("El saldo inicial debe ser mayor a 0.");
         }
+
+        String numeroCuenta = IntStream.range(0, 10)
+                .map(i -> new Random().nextInt(10)) // Genera un número aleatorio entre 0 y 9 para cada índice
+                .mapToObj(String::valueOf) // Convierte cada número a String
+                .collect(Collectors.joining()); // Une todos los Strings en uno solo
+
+        account.setNumeroCuenta(numeroCuenta);
+
         // Reconozco que esto no es optimo
         // al agregar mas tipos de cuenta habria que editarlo y no cumpliria con las buenas practicas
         //para el siguiente proyecto tomaré medidas mas flexibles para cumplir con los requisitos
