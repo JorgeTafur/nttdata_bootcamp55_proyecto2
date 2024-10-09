@@ -4,7 +4,7 @@ info:
   description: API para gestionar usuarios, cuentas y transacciones bancarias en el banco XYZ.
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8080
 paths:
   /clientes:
     get:
@@ -179,7 +179,7 @@ paths:
           in: path
           required: true
           schema:
-            type: String
+            type: string
       responses:
         '200':
           description: Detalles de cuenta
