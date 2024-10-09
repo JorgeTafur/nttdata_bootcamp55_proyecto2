@@ -4,7 +4,7 @@ info:
   description: API para gestionar usuarios, cuentas y transacciones bancarias en el banco XYZ.
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api
 paths:
   /clientes:
     get:
